@@ -10,7 +10,7 @@ function distance(a, b) {
 function Circle(game) {
     this.radius = 3;
     Entity.call(this, game, Math.random() * 1200, Math.random() * 800);
-    this.velocity = { x: Math.random() * 1000, y: Math.random() *1000};
+    this.velocity = { x: Math.random(), y: Math.random() * 250};
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
     if (speed > maxSpeed) {
         var ratio = maxSpeed / speed;
