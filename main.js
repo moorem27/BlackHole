@@ -9,22 +9,23 @@ function distance(a, b) {
 
 function Circle(game) {
     this.radius = 2;
-    Entity.call(this, game, Math.random() * 1200, Math.random() * 1200);
-    this.velocity = { x: Math.random() * 1000, y: Math.random() * 1000};
+    //this.prevX = 0;
+    //this.prevY = 0;
+    this.prevDist = distance(this, Planet);
+    Entity.call(this, game, Math.random() * 1000, Math.random() * 1000);
+    this.velocity = { x: 1000 * Math.random() , y: 1000 * Math.random()};
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
     if (speed > maxSpeed) {
         var ratio = maxSpeed / speed;
         this.velocity.x *= ratio;
         this.velocity.y *= ratio;
     }
-};
+}
 
 //Planet to be that other planets will orbit around
 function Planet(game) {
     var canvas = document.getElementById('gameWorld');
-    this.radius = 50;
-    this.prevX;
-    this.prevY;
+    this.radius = 10;
     this.x = (canvas.width)/2;
     this.y = (canvas.height)/2;
     Entity.call(this, game, this.x, this.y);
@@ -46,11 +47,21 @@ Circle.prototype.update = function () {
 
     //Start at index 1, since index 0 is reserved for the planet
     for (var i = 1; i < this.game.entities.length; i++) {
-        this.game.entities[i].prevX = this.game.entities[i].x;
-        this.game.entities[i].prevY = this.game.entities[i].y;
+        var currDist = distance(planet, this.game.entities[i]); //Current circle's dist from black hole
+
+        //If the current distance is less than the previous distance
+        if((currDist < this.game.entities[i].prevDist) && (this.game.entities[i].radius > 0) && currDist < 100) {
+            this.game.entities[i].radius = this.game.entities[i].radius - .25;
+        }
+
+        this.game.entities[i].prevDist = distance(planet, this.game.entities[i]);
+
+        //If circle passes event horizon, remove from simulation
         if(distance(planet, this.game.entities[i]) < this.game.entities[i].radius + planet.radius) {
             this.game.entities[i].removeFromWorld = true;
         }
+
+
         var ent = this.game.entities[i];
         var dist = distance(planet, ent);
         if (dist > planet.radius + ent.radius) {
