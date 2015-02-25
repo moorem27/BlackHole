@@ -51,7 +51,7 @@ Circle.prototype.update = function () {
         var currDist = distance(planet, this.game.entities[i]); //Current circle's dist from black hole
 
         //If the current distance is less than the previous distance
-        if((currDist < this.game.entities[i].prevDist) && (this.game.entities[i].radius > 0) && currDist < 170) {
+        if((currDist < this.game.entities[i].prevDist) && (this.game.entities[i].radius > 0) && currDist < 200) {
             this.game.entities[i].radius = this.game.entities[i].radius - .25;
         }
 
