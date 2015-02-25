@@ -22,7 +22,7 @@ function Circle(game) {
 //Planet to be that other planets will orbit around
 function Planet(game) {
     var canvas = document.getElementById('gameWorld');
-    this.radius = 20;
+    this.radius = 150;
     this.x = (canvas.width)/2;
     this.y = (canvas.height)/2;
     Entity.call(this, game, this.x, this.y);
@@ -67,7 +67,7 @@ Circle.prototype.update = function () {
 
 Circle.prototype.draw = function (ctx) {
     ctx.beginPath();
-    ctx.fillStyle = "Yellow";
+    ctx.fillStyle = "White";
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fill();
     ctx.closePath();
@@ -75,8 +75,11 @@ Circle.prototype.draw = function (ctx) {
 };
 
 Planet.prototype.draw = function (ctx) {
+    var background = new Image();
+    background.src = "img/blackHole.jpg";
+    ctx.drawImage(background, 0, 0);
     ctx.beginPath();
-    ctx.fillStyle = "Blue";
+    ctx.fillStyle = "Black";
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI* 2, false);
     ctx.fill();
     ctx.closePath();
@@ -89,17 +92,23 @@ var ASSET_MANAGER = new AssetManager();
 var planet;
 
 
-ASSET_MANAGER.queueDownload("./img/white.png");
+ASSET_MANAGER.queueDownload("./img/blackHole.jpg");
 
 ASSET_MANAGER.downloadAll(function () {
-    console.log("starting up da sheild");
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
     var gameEngine = new GameEngine();
-    //var circle = new Circle(gameEngine);
     planet = new Planet(gameEngine);
     gameEngine.addEntity(planet);
-    //gameEngine.addEntity(circle);
+    canvas.width = 1200;
+    canvas.height = 800;
+
+
+
+
+
+
+
 
     for(var i = 0; i < 300; i++) {
         var circle = new Circle(gameEngine);
