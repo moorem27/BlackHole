@@ -8,7 +8,7 @@ function distance(a, b) {
 }
 
 function Circle(game) {
-    this.radius = 2;
+    this.radius = 5;
     //this.prevX = 0;
     //this.prevY = 0;
     this.prevDist = distance(this, Planet);
