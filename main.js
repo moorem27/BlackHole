@@ -14,7 +14,7 @@ function Circle(game) {
     //this.prevY = 0;
     this.prevDist = distance(this, Planet);
     Entity.call(this, game, Math.random() * 1000, Math.random() * 1000);
-    this.velocity = { x: 1000 * Math.random() , y: 1000 * Math.random()};
+    this.velocity = { x:  1000* Math.random() , y: 1000* Math.random()};
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
     if (speed > maxSpeed) {
         var ratio = maxSpeed / speed;
@@ -48,10 +48,10 @@ Circle.prototype.update = function () {
 
     //Start at index 1, since index 0 is reserved for the planet
     for (var i = 1; i < this.game.entities.length; i++) {
-        var currDist = distance(planet, this.game.entities[i]); //Current circle's dist from black hole
+        var currDist = distance(planet, this.game.entities[i]); //Current circle's distance from black hole
 
-        //If the current distance is less than the previous distance
-        if((currDist < this.game.entities[i].prevDist) && (this.game.entities[i].radius > 0) && currDist < 200) {
+        //If the current distance is less than the previous distance, decrease circle radius
+        if((currDist < this.game.entities[i].prevDist) && (this.game.entities[i].radius > 0) && currDist < 150) {
             this.game.entities[i].radius = this.game.entities[i].radius - .25;
         }
 
@@ -63,10 +63,14 @@ Circle.prototype.update = function () {
         }
 
         var ent = this.game.entities[i];
-        var dist = distance(planet, ent);
+        var dist = distance(planet, ent); //straight line distance between the entity and the black hole
+
+
         if (dist > planet.radius + ent.radius) {
             var difX = (ent.x - planet.x) / dist;
             var difY = (ent.y - planet.y) / dist;
+
+            //incorporate the black hole's gravitational pull
             ent.velocity.x -= difX * gravity / (dist * dist);
             ent.velocity.y -= difY * gravity / (dist * dist);
             var speed = Math.sqrt(ent.velocity.x * ent.velocity.x + ent.velocity.y * ent.velocity.y);
@@ -100,7 +104,6 @@ Planet.prototype.draw = function (ctx) {
     ctx.closePath();
 }
 
-// the "main" code begins here
 var gravity = 1000;
 var maxSpeed = 200;
 var ASSET_MANAGER = new AssetManager();
