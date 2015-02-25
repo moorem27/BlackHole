@@ -1,5 +1,6 @@
-
-// GameBoard code below
+/*
+Game Engine code borrowed from Dr. Chris Mariott
+ */
 
 function distance(a, b) {
     var dx = a.x - b.x;
@@ -50,7 +51,7 @@ Circle.prototype.update = function () {
         var currDist = distance(planet, this.game.entities[i]); //Current circle's dist from black hole
 
         //If the current distance is less than the previous distance
-        if((currDist < this.game.entities[i].prevDist) && (this.game.entities[i].radius > 0) && currDist < 100) {
+        if((currDist < this.game.entities[i].prevDist) && (this.game.entities[i].radius > 0) && currDist < 170) {
             this.game.entities[i].radius = this.game.entities[i].radius - .25;
         }
 
@@ -60,7 +61,6 @@ Circle.prototype.update = function () {
         if(distance(planet, this.game.entities[i]) < this.game.entities[i].radius + planet.radius) {
             this.game.entities[i].removeFromWorld = true;
         }
-
 
         var ent = this.game.entities[i];
         var dist = distance(planet, ent);
@@ -118,7 +118,7 @@ ASSET_MANAGER.downloadAll(function () {
     canvas.width = 1200;
     canvas.height = 800;
 
-    for(var i = 0; i < 400; i++) {
+    for(var i = 0; i < 500; i++) {
         var circle = new Circle(gameEngine);
         gameEngine.addEntity(circle);
     }
