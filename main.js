@@ -8,9 +8,9 @@ function distance(a, b) {
 }
 
 function Circle(game) {
-    this.radius = 3;
-    Entity.call(this, game, Math.random() * 1200, Math.random() * 800);
-    this.velocity = { x: Math.random(), y: Math.random() * 250};
+    this.radius = 2;
+    Entity.call(this, game, Math.random() * 1200, Math.random() * 1200);
+    this.velocity = { x: Math.random() * 1000, y: Math.random() * 1000};
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
     if (speed > maxSpeed) {
         var ratio = maxSpeed / speed;
@@ -22,7 +22,9 @@ function Circle(game) {
 //Planet to be that other planets will orbit around
 function Planet(game) {
     var canvas = document.getElementById('gameWorld');
-    this.radius = 150;
+    this.radius = 50;
+    this.prevX;
+    this.prevY;
     this.x = (canvas.width)/2;
     this.y = (canvas.height)/2;
     Entity.call(this, game, this.x, this.y);
@@ -44,6 +46,8 @@ Circle.prototype.update = function () {
 
     //Start at index 1, since index 0 is reserved for the planet
     for (var i = 1; i < this.game.entities.length; i++) {
+        this.game.entities[i].prevX = this.game.entities[i].x;
+        this.game.entities[i].prevY = this.game.entities[i].y;
         if(distance(planet, this.game.entities[i]) < this.game.entities[i].radius + planet.radius) {
             this.game.entities[i].removeFromWorld = true;
         }
@@ -103,17 +107,11 @@ ASSET_MANAGER.downloadAll(function () {
     canvas.width = 1200;
     canvas.height = 800;
 
-
-
-
-
-
-
-
-    for(var i = 0; i < 300; i++) {
+    for(var i = 0; i < 400; i++) {
         var circle = new Circle(gameEngine);
         gameEngine.addEntity(circle);
     }
+
     gameEngine.init(ctx);
     gameEngine.start();
 });
