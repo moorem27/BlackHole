@@ -103,7 +103,7 @@ Planet.prototype.draw = function (ctx) {
     ctx.fill();
     ctx.closePath();
 }
-
+var gameEngine;
 var gravity = 1000;
 var maxSpeed = 200;
 var ASSET_MANAGER = new AssetManager();
@@ -115,12 +115,11 @@ ASSET_MANAGER.queueDownload("./img/blackHole.jpg");
 ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
-    var gameEngine = new GameEngine();
+    gameEngine = new GameEngine();
     planet = new Planet(gameEngine);
     gameEngine.addEntity(planet);
     canvas.width = 1200;
     canvas.height = 800;
-
     for(var i = 0; i < 500; i++) {
         var circle = new Circle(gameEngine);
         gameEngine.addEntity(circle);
@@ -128,4 +127,44 @@ ASSET_MANAGER.downloadAll(function () {
 
     gameEngine.init(ctx);
     gameEngine.start();
+});
+
+$('document').ready(function() {
+    var ipAddress = '76.28.150.193';
+    var port = '8888';
+    var socket = io.connect('http://' + ipAddress + ':' + port);
+    socket.on("connect", function () {
+        $('#saveState').submit(function(event){
+            var saveName = $('#saveState').serializeArray()[0].value;
+            event.preventDefault();
+            var gameState = [];
+            var star;
+            for(var i = 1; i < gameEngine.entities.length; i++) {
+                star = {x: gameEngine.entities[i].x, y: gameEngine.entities[i].y,
+                    velocityX: gameEngine.entities[i].velocity.x, velocityY: gameEngine.entities[i].velocity.y};
+                gameState.push(star);
+            }
+            socket.emit('save', {studentname: "Matthew Moore", statename: saveName, data: gameState});
+        });
+
+        $('#loadState').submit(function(event) {
+            event.preventDefault();
+            var loadName = $('#loadState').serializeArray()[0].value;
+            socket.emit('load', {studentname: "Matthew Moore", statename: loadName});
+            socket.on('load', function (d) {
+                gameEngine.entities = [];
+                planet = new Planet(gameEngine);
+                gameEngine.addEntity(planet);
+                for(var i = 0; i < d.data.length; i++) {
+                    var c = new Circle(gameEngine);
+                    c.x = d.data[i].x;
+                    c.y = d.data[i].y;
+                    c.velocity.x = d.data[i].velocityX;
+                    c.velocity.y = d.data[i].velocityY;
+                    gameEngine.addEntity(c);
+                }
+            });
+        });
+
+    });
 });
