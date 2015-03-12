@@ -3,13 +3,26 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>WebGo</title>
+    <title>Black Hole</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://76.28.150.193:8888/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="./assetmanager.js"></script>
     <script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="main.js"></script>
 </head>
 <body>
-    <div>25 Feb 2015. Will stable orbits form? Written in Javascript and HTML5.</div>
+    <div>25 Feb 2015. Written in Javascript and HTML5.</div>
+    <form id = 'saveState'>
+        <label for = 'saveStateID'> Save State: </label>
+        <input id = 'saveStateID' name = 'saveStateID'>
+        <button id="save" type = 'submit'>Save</button>
+    </form>
+    <form id = 'loadState'>
+        <label for = 'loadStateID'> Load State: </label>
+        <input id = 'loadStateID' name = 'loadStateID'>
+        <button id="load" type = 'submit'>Load</button>
+    </form>
+
     <canvas id="gameWorld" width="1200" height="800" style="border: 1px solid white; background: black"></canvas>
 </body>
 </html>
